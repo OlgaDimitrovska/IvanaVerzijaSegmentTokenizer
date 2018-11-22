@@ -124,10 +124,19 @@ public class Main extends Application
 
 	public static List<String> getSlucai(String str) {
 	    List<String> tokens = new ArrayList<>();
-	    StringTokenizer tokenizer = new StringTokenizer(str,("\\([0-9]*\\)"));
-	    while (tokenizer.hasMoreElements()) {
+	    
+	    String[] tokenizer = str.split("\\(\\d+\\)");
+	    
+	    //StringTokenizer tokenizer = new StringTokenizer(str,("\\([0-9]*\\)"));
+	  for(int l=0; l<tokenizer.length; l++) 
+	  {
 	    	//addnuva string
-	    	String tmp=tokenizer.nextToken();
+		  if(tokenizer[l].contains("__________"))
+		  {
+			  tokenizer[l] = tokenizer[l].replace("__________", "");
+		  }
+		  
+	    	String tmp=tokenizer[l];
 	    	
 	    	//tuka sredi gi so na kraj -
 	    	String[] lines = tmp.split(System.getProperty("line.separator"));
