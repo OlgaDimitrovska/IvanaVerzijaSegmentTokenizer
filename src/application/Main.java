@@ -1,21 +1,18 @@
 package application;
 	
-import java.io.File;
-
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 
 import java.io.*;
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.text.DateFormat.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.StringTokenizer;
+import java.util.Map.Entry;
 
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -28,6 +25,10 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import opennlp.tools.namefind.NameFinderME;
+import opennlp.tools.namefind.TokenNameFinderModel;
+import opennlp.tools.tokenize.SimpleTokenizer;
+import opennlp.tools.util.Span;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import org.apache.fontbox.afm.AFMParser;
@@ -96,9 +97,9 @@ public class Main extends Application
 			                    	 
 			                    	 for(String slucaj : dokument)
 			        				 {
-			        					//find(slucaj);
-			        					//System.out.printf("%n"); 
-			        					 System.out.println(slucaj);
+			        					find(slucaj);
+			        					System.out.printf("%n"); 
+			        					//System.out.println(slucaj);
 			        					 
 			        				 }
 			                    	 
@@ -151,7 +152,75 @@ public class Main extends Application
 
 	}
 	
+	
+	
+	public static LinkedHashMap<String, String> find(String content) throws IOException {
+	    
+		
+    	InputStream is= new  FileInputStream("D:\\JavaNlpMk\\mk ner modeli statusi stecai\\predstecajni-ner-model.bin");
+		 
+		TokenNameFinderModel model = new TokenNameFinderModel(is);
+	    is.close();
 
+	    //Map<String, TokenNameFinderModel> nameFinderModels = new HashMap<>(); 
+	     
+	    NameFinderME nameFinder = new NameFinderME(model);
+        //TokenNameFinderModel finderModel= nameFinderModels.get(field);
+
+        String[] tokens = SimpleTokenizer.INSTANCE.tokenize(content);
+        
+        LinkedHashMap<String, String> settt = new LinkedHashMap<String, String>();
+        
+        Span spans[] = nameFinder.find(tokens);
+        
+        //System.out.println(spans.length);
+        
+        
+        
+     
+        
+        
+        
+        if(spans.length == 0)
+        {
+        	System.out.println("nema tag");
+        }
+        else
+        {
+        	
+        	String spans2[]= new String[spans.length-1];
+        	
+	        for (int i=0; i<spans.length-1; ++i) {
+	            spans2[i] =spans[i].toString();
+	        }
+
+        	String[] names = Span.spansToStrings(spans, tokens);
+        
+        
+      
+        
+	        for(int j=0;j<spans2.length-1;j++) {
+	        	
+	        	settt.put(spans2[j], names[j]);
+	        	
+	        }
+        
+        
+
+	        for (Entry<String, String> entry : settt.entrySet()) {
+	            System.out.println(entry.getKey().toString()+" : "+entry.getValue().toString());
+	        }
+	        
+        }
+        
+        return settt;
+        
+        
+   
+}
+	
+	
+	
 	public static List<String> getSlucai(String str) 
 	{
 	    List<String> tokens = new ArrayList<>();
