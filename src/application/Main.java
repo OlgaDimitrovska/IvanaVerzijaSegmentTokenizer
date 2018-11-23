@@ -121,7 +121,7 @@ public class Main extends Application
 			borderPane.setTop(topMenu);
 			borderPane.setLeft(leftMenu);		
 			
-			scene1 = new Scene(borderPane, 300, 250);
+			scene1 = new Scene(borderPane, 600, 550);
 			
 			window.setScene(scene1);
 			window.show();
