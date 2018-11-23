@@ -97,6 +97,8 @@ public class Main extends Application
 			                    	 for(String slucaj : dokument)
 			        				 {
 			        					//find(slucaj);
+			                    		 //za relativnite 
+			                    		 //getResource("/Files/myfile.txt")
 			        					//System.out.printf("%n"); 
 			        					 System.out.println(slucaj);
 			        					 
@@ -127,6 +129,7 @@ public class Main extends Application
 			window.show();
 			
 		} 		
+		
 		catch(Exception e) 
 		{
 			e.printStackTrace();
