@@ -42,7 +42,7 @@ public class Main extends Application
 	
 	public static void main(String[] args) 
 	{
-		//System.setProperty("file.encoding","UTF-8");	
+		
 		launch(args);
 	}
 	
@@ -57,22 +57,6 @@ public class Main extends Application
 			 final FileChooser fileChooser = new FileChooser();
 				 
 
-				 List<String> dokument = getSlucai(PDFtoTEXT());
-				 
-				 System.out.println("----------------Slucai: ----------------");
-	 
-				 for(String slucaj : dokument)
-				 {
-					//find(slucaj);
-					//System.out.printf("%n"); 
-					 System.out.println(slucaj);
-					 
-				 }
-				 
-
-		
-		      
-		      
 			
 			window=primaryStage;
 			primaryStage.setTitle("Voila probno");
@@ -99,8 +83,32 @@ public class Main extends Application
 		                    File file = fileChooser.showOpenDialog(primaryStage);
 		                    if (file != null) {
 		                        //openFile(file);
-		                    	String pateka = file.getAbsolutePath();
+		                    	String pateka = "";
+		                    	pateka = file.getAbsolutePath();
 		                    	System.out.println(pateka);
+		                    	
+		                    	 List<String> dokument;
+								try 
+								{
+									dokument = getSlucai(PDFtoTEXT(pateka));
+									
+									 System.out.println("----------------Slucai: ----------------");
+			                    	 
+			                    	 for(String slucaj : dokument)
+			        				 {
+			        					//find(slucaj);
+			        					//System.out.printf("%n"); 
+			        					 System.out.println(slucaj);
+			        					 
+			        				 }
+			                    	 
+								}
+								
+								catch (IOException e1) 
+								{
+									//ne naogja pdf so takva pateka, treba da pecati ALERT
+									e1.printStackTrace();
+								}
 		                    	
 		                    	
 		                    	
@@ -125,11 +133,12 @@ public class Main extends Application
 		}
 	}
 	
-	public static String PDFtoTEXT() throws IOException{
+	public static String PDFtoTEXT(String pateka) throws IOException{
 		
 		  
         
-		  File file = new File("C:\\Users\\ivanam\\Downloads\\Stecajni postapki 2018\\Stecajni postapki 2018\\SLU@BEN VESNIK NA RM br. 2-STE^AJNI POSTAPKI.pdf");
+		  //File file = new File("C:\\Users\\ivanam\\Downloads\\Stecajni postapki 2018\\Stecajni postapki 2018\\SLU@BEN VESNIK NA RM br. 2-STE^AJNI POSTAPKI.pdf");
+		  File file = new File(pateka);
 	      PDDocument document = PDDocument.load(file);
 
 	      PDFTextStripper pdfStripper = new PDFTextStripper();
@@ -143,7 +152,8 @@ public class Main extends Application
 	}
 	
 
-	public static List<String> getSlucai(String str) {
+	public static List<String> getSlucai(String str) 
+	{
 	    List<String> tokens = new ArrayList<>();
 	    
 	    String[] tokenizer = str.split("\\(\\d+\\)");
