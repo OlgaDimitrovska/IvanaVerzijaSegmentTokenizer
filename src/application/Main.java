@@ -25,6 +25,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -52,7 +54,7 @@ public class Main extends Application
 		try 
 		{
 			
-			 
+			 final FileChooser fileChooser = new FileChooser();
 				 
 
 				 List<String> dokument = getSlucai(PDFtoTEXT());
@@ -77,16 +79,35 @@ public class Main extends Application
 			
 			//window.setOnCloseRequest(e -> closeProgram());
 			HBox topMenu = new HBox();
+			
+					
 			Button btnA = new Button("File");
 			Button btnB = new Button("Edit");
 			Button btnC = new Button("View");
 			topMenu.getChildren().addAll(btnA, btnB, btnC);
 			
+			
 			VBox leftMenu = new VBox();
-			Button btnD = new Button("D");
-			Button btnE = new Button("E");
-			Button btnF = new Button("F");
-			leftMenu.getChildren().addAll(btnD, btnE, btnF);
+			final Button openButton = new Button("Choose PDF file...");
+			
+			leftMenu.getChildren().addAll(openButton);
+			
+			openButton.setOnAction(
+		            new EventHandler<ActionEvent>() {
+		                @Override
+		                public void handle(final ActionEvent e) {
+		                    File file = fileChooser.showOpenDialog(primaryStage);
+		                    if (file != null) {
+		                        //openFile(file);
+		                    	String pateka = file.getAbsolutePath();
+		                    	System.out.println(pateka);
+		                    	
+		                    	
+		                    	
+		                    	
+		                    }
+		                }
+		            });
 			
 			BorderPane borderPane = new BorderPane();
 			borderPane.setTop(topMenu);
