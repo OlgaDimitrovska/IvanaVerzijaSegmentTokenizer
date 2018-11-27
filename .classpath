@@ -72,5 +72,6 @@
 	<classpathentry kind="lib" path="C:/Users/ivanam/eclipse-workspace/StecajniPostapki/jarovi/validation-api-1.1.0.Final.jar"/>
 	<classpathentry kind="lib" path="C:/Users/ivanam/eclipse-workspace/StecajniPostapki/jarovi/xmlbeans-3.0.1.jar"/>
 	<classpathentry kind="lib" path="C:/Users/ivanam/eclipse-workspace/StecajniPostapki/jarovi/xmpbox-2.0.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/ivanam/eclipse-workspace/StecajniPostapki/jarovi/sqljdbc42.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
