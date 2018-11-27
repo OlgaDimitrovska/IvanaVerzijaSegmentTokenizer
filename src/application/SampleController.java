@@ -40,50 +40,51 @@ public class SampleController implements Initializable{
 	   // private Button openButton;
 	
 	@FXML 
-	private TableView<?> table;
+	private TableView<privSpostapka> table;
 	
 	@FXML 
-	private TableColumn<?, ?> col_sud;
+	private TableColumn<privSpostapka, String> col_sud;
 	
 	@FXML 
-	private TableColumn<?, ?> col_resenie;
+	private TableColumn<privSpostapka, String> col_resenie;
 	
 	@FXML 
-	private TableColumn<?, ?> col_pravnoLice;
+	private TableColumn<privSpostapka, String> col_pravnoLice;
 	
 	@FXML 
-	private TableColumn<?, ?> col_edb;
+	private TableColumn<privSpostapka, String> col_edb;
 	
 	@FXML 
-	private TableColumn<?, ?> col_datum;
+	private TableColumn<privSpostapka, String> col_datum;
 	
 	@FXML 
-	private TableColumn<?, ?> col_predStecajna;
+	private TableColumn<privSpostapka, String> col_predStecajna;
 	
 	@FXML 
-	private TableColumn<?, ?> col_zakazanoRoc;
+	private TableColumn<privSpostapka, String> col_zakazanoRoc;
 	
 	@FXML 
-	private TableColumn<?, ?> col_otvorena;
+	private TableColumn<privSpostapka, String> col_otvorena;
 	
 	@FXML 
-	private TableColumn<?, ?> col_nesprovedena;
+	private TableColumn<privSpostapka, String> col_nesprovedena;
 	
 	@FXML 
-	private TableColumn<?, ?> col_zaklucena;
+	private TableColumn<privSpostapka, String> col_zaklucena;
 	
 	@FXML 
-	private TableColumn<?, ?> col_brisenjeOdCR;
+	private TableColumn<privSpostapka, String> col_brisenjeOdCR;
 	
 	@FXML 
-	private TableColumn<?, ?> col_zaprena;
+	private TableColumn<privSpostapka, String> col_zaprena;
 	
 
 	
 
 	@Override
-	public void initialize(URL arg0, ResourceBundle arg1) {
-		
+	public void initialize(URL arg0, ResourceBundle arg1) 
+	{
+		//col_sud.setCellValueFactory(new PropertyValueFactory<>);
 		
 	}
 	

@@ -33,6 +33,10 @@ public class privSpostapka
 	
 	private String predStecajna;
 	
+	public privSpostapka() {
+		super();
+	}
+
 	private String statusZakazanoRociste;
 	
 	private String otvorena;
