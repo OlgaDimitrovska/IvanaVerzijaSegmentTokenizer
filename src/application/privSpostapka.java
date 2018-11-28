@@ -1,5 +1,7 @@
 package application;
 
+import javafx.scene.control.CheckBox;
+
 public class privSpostapka 
 {
 	
@@ -27,11 +29,9 @@ public class privSpostapka
 		super();
 	}
 	
-	
-	
 	public privSpostapka(String sud, String resenie, String pravnoLice, String edb, String datum, String predStecajna,
 			String statusZakazanoRociste, String otvorena, String nesprovedena, String zaklucuva, String brisenjeOdCR,
-			String zapira) 
+			String zapira, CheckBox check) 
 	{
 		super();
 		this.sud = sud;
@@ -46,10 +46,11 @@ public class privSpostapka
 		this.zaklucuva = zaklucuva;
 		this.brisenjeOdCR = brisenjeOdCR;
 		this.zapira = zapira;
+		this.check = check;
 	}
 
 
-
+	
 	private String sud;
 	
 	private String resenie;
@@ -60,8 +61,7 @@ public class privSpostapka
 	
 	private String datum;
 	
-	private String predStecajna;
-	
+	private String predStecajna;	
 
 
 	private String statusZakazanoRociste;
@@ -76,8 +76,20 @@ public class privSpostapka
 	
 	private String zapira;
 	
+	private CheckBox check;
+	
 		
 	//////////////////
+
+
+
+	public CheckBox getCheck() {
+		return check;
+	}
+
+	public void setCheck(CheckBox check) {
+		this.check = check;
+	}
 
 	public String getSud() {
 		return sud;

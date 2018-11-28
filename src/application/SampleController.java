@@ -27,7 +27,9 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-
+import javafx.geometry.Pos;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.Labeled;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -82,6 +84,9 @@ public class SampleController implements Initializable{
 	@FXML 
 	private TableColumn<privSpostapka, String> col_zaprena;
 	
+	@FXML 
+	private TableColumn<privSpostapka, CheckBox> col_check;
+	
 	
 	private ObservableList<privSpostapka> oblist= FXCollections.observableArrayList();
 	
@@ -98,14 +103,14 @@ public class SampleController implements Initializable{
 			
 			while(rs.next())
 			{
+				CheckBox tmp = new CheckBox(null);
 				oblist.add(new privSpostapka(rs.getString("sud"), rs.getString("resenie"), rs.getString("pravnoLice"),  rs.getString("edb"), rs.getString("datum"), rs.getString("predStecajna"),
-				 rs.getString("statusZakazanoRociste"), rs.getString("otvorena"), rs.getString("nesprovedena"), rs.getString("zaklucuva"), rs.getString("brisenjeOdCR"), rs.getString("zapira")));
+				 rs.getString("statusZakazanoRociste"), rs.getString("otvorena"), rs.getString("nesprovedena"), rs.getString("zaklucuva"), rs.getString("brisenjeOdCR"), rs.getString("zapira"), tmp));
 			}
 			
 		} 
 		catch (SQLException e) 
-		{
-			
+		{			
 			e.printStackTrace();
 		}
 		
@@ -124,10 +129,14 @@ public class SampleController implements Initializable{
 		col_zaklucena.setCellValueFactory(new PropertyValueFactory<>("zaklucuva"));
 		col_brisenjeOdCR.setCellValueFactory(new PropertyValueFactory<>("brisenjeOdCR"));
 		col_zaprena.setCellValueFactory(new PropertyValueFactory<>("zapira"));
+		col_check.setCellValueFactory(new PropertyValueFactory<>("check"));
+		
 		
 		table.setItems(oblist);
 					
 	}
+	
+	
 	
 	
 	private Stage myStage;
