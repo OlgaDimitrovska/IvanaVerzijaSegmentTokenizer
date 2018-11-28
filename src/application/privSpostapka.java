@@ -4,7 +4,8 @@ public class privSpostapka
 {
 	
 	@Override
-	public String toString() {
+	public String toString() 
+	{
 		StringBuilder sb = new StringBuilder();		
 		sb.append("sud: "+sud+" ");
 		sb.append("resenie: "+resenie+" ");		
@@ -21,6 +22,34 @@ public class privSpostapka
 		return sb.toString(); 
 	}
 	
+	public privSpostapka() 
+	{
+		super();
+	}
+	
+	
+	
+	public privSpostapka(String sud, String resenie, String pravnoLice, String edb, String datum, String predStecajna,
+			String statusZakazanoRociste, String otvorena, String nesprovedena, String zaklucuva, String brisenjeOdCR,
+			String zapira) 
+	{
+		super();
+		this.sud = sud;
+		this.resenie = resenie;
+		this.pravnoLice = pravnoLice;
+		this.edb = edb;
+		this.datum = datum;
+		this.predStecajna = predStecajna;
+		this.statusZakazanoRociste = statusZakazanoRociste;
+		this.otvorena = otvorena;
+		this.nesprovedena = nesprovedena;
+		this.zaklucuva = zaklucuva;
+		this.brisenjeOdCR = brisenjeOdCR;
+		this.zapira = zapira;
+	}
+
+
+
 	private String sud;
 	
 	private String resenie;
@@ -33,9 +62,7 @@ public class privSpostapka
 	
 	private String predStecajna;
 	
-	public privSpostapka() {
-		super();
-	}
+
 
 	private String statusZakazanoRociste;
 	

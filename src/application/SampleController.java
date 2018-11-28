@@ -10,6 +10,7 @@ import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -21,12 +22,15 @@ import java.util.Map.Entry;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
+
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import opennlp.tools.namefind.NameFinderME;
@@ -78,14 +82,51 @@ public class SampleController implements Initializable{
 	@FXML 
 	private TableColumn<privSpostapka, String> col_zaprena;
 	
-
+	
+	private ObservableList<privSpostapka> oblist= FXCollections.observableArrayList();
 	
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) 
 	{
-		//col_sud.setCellValueFactory(new PropertyValueFactory<>);
 		
+		
+		Connection conn = DBConnector.getConnect();
+		try 
+		{
+			ResultSet rs = conn.createStatement().executeQuery("select sud, resenie, pravnoLice, edb, datum, predStecajna, statusZakazanoRociste, otvorena, nesprovedena, zaklucuva, brisenjeOdCR, zapira from privremeniPostapki");
+			
+			while(rs.next())
+			{
+				oblist.add(new privSpostapka(rs.getString("sud"), rs.getString("resenie"), rs.getString("pravnoLice"),  rs.getString("edb"), rs.getString("datum"), rs.getString("predStecajna"),
+				 rs.getString("statusZakazanoRociste"), rs.getString("otvorena"), rs.getString("nesprovedena"), rs.getString("zaklucuva"), rs.getString("brisenjeOdCR"), rs.getString("zapira")));
+			}
+			
+		} 
+		catch (SQLException e) 
+		{
+			
+			e.printStackTrace();
+		}
+		
+		
+		col_sud.setCellValueFactory(new PropertyValueFactory<>("sud"));
+		col_resenie.setCellValueFactory(new PropertyValueFactory<>("resenie"));
+		col_pravnoLice.setCellValueFactory(new PropertyValueFactory<>("pravnoLice"));
+		col_edb.setCellValueFactory(new PropertyValueFactory<>("edb"));
+		
+		col_datum.setCellValueFactory(new PropertyValueFactory<>("datum"));
+		col_predStecajna.setCellValueFactory(new PropertyValueFactory<>("predStecajna"));
+		col_zakazanoRoc.setCellValueFactory(new PropertyValueFactory<>("statusZakazanoRociste"));
+		col_otvorena.setCellValueFactory(new PropertyValueFactory<>("otvorena"));
+		
+		col_nesprovedena.setCellValueFactory(new PropertyValueFactory<>("nesprovedena"));
+		col_zaklucena.setCellValueFactory(new PropertyValueFactory<>("zaklucuva"));
+		col_brisenjeOdCR.setCellValueFactory(new PropertyValueFactory<>("brisenjeOdCR"));
+		col_zaprena.setCellValueFactory(new PropertyValueFactory<>("zapira"));
+		
+		table.setItems(oblist);
+					
 	}
 	
 	
@@ -282,14 +323,10 @@ public class SampleController implements Initializable{
 		private static void insertiranje(sPostapka tmpStecPost) throws SQLException
 		{
 			 try 
-			 {
-				Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-				//database=databasename; mozda vaka treba
-				Connection connection = DriverManager.getConnection("jdbc:sqlserver://localhost:1433;databaseName=StecajniPostapki", "sa", "sql&627S");
-				//;databaseName=company", "sa", "root");
+			 {		
+				System.out.println("Database Name: " + DBConnector.getConnect().getMetaData().getDatabaseProductName());
 				
-				System.out.println("Database Name: " + connection.getMetaData().getDatabaseProductName());
-				PreparedStatement prep = connection.prepareStatement("INSERT INTO privremeniPostapki(sud, resenie, dolznik, pravnoLice, edb, stecaenUpravnik, imeStecUpr, dooel, uvozizvoz, drustvo, dejnost, predStecajna, otvorena, statusZakazanoRociste, nesprovedena, zaklucuva, brisenjeOdCR, zapira, sobranieNaDoveriteli, datum) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+				PreparedStatement prep = DBConnector.getConnect().prepareStatement("INSERT INTO privremeniPostapki(sud, resenie, dolznik, pravnoLice, edb, stecaenUpravnik, imeStecUpr, dooel, uvozizvoz, drustvo, dejnost, predStecajna, otvorena, statusZakazanoRociste, nesprovedena, zaklucuva, brisenjeOdCR, zapira, sobranieNaDoveriteli, datum) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 				prep.setString(1, tmpStecPost.getSud());
 				prep.setString(2, tmpStecPost.getResenie());
 				prep.setString(3, tmpStecPost.getDolznik());
@@ -316,8 +353,10 @@ public class SampleController implements Initializable{
 				prep.executeUpdate();
 				
 			} 
-			 catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
+			 
+			 catch (Exception e) 
+			 {
+				
 				e.printStackTrace();
 			}
 			
