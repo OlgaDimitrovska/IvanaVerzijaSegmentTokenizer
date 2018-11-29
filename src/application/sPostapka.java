@@ -1,12 +1,14 @@
 package application;
 
+import javafx.scene.control.CheckBox;
+
 public class sPostapka 
 {
 	
 	@Override
 	public String toString() {
 		
-		//return super.toString();
+		
 		StringBuilder sb = new StringBuilder();
 		
 		sb.append("sud: "+sud+" ");
@@ -37,6 +39,25 @@ public class sPostapka
 		return sb.toString(); 
 	}
 	
+	public sPostapka(String sud, String resenie, String pravnoLice, String edb, String datum, String predStecajna,
+			String statusZakazanoRociste, String otvorena, String nesprovedena, String zaklucuva, String brisenjeOdCR,
+			String zapira, int id) {
+		super();
+		this.sud = sud;
+		this.resenie = resenie;
+		this.pravnoLice = pravnoLice;
+		this.edb = edb;
+		this.datum = datum;
+		this.predStecajna = predStecajna;
+		this.statusZakazanoRociste = statusZakazanoRociste;
+		this.otvorena = otvorena;
+		this.nesprovedena = nesprovedena;
+		this.zaklucuva = zaklucuva;
+		this.brisenjeOdCR = brisenjeOdCR;
+		this.zapira = zapira;
+		this.id = id;
+	}
+
 	private String sud;
 	
 	private String resenie;
@@ -46,8 +67,9 @@ public class sPostapka
 	private String pravnoLice;
 	
 	private String edb;
-	//////////////////
 	
+	private String datum;
+		
 	private String stecaenUpravnik;
 	
 	private String imeStecUpr;
@@ -57,40 +79,34 @@ public class sPostapka
 	private String uvozizvoz;
 	
 	private String drustvo;
-	//////////////////
-	
+		
 	private String dejnost;
 	
 	private String predStecajna;
 	
-	
-	
-	private String otvorena;
-	
-	
-	//////////////////
 	private String statusZakazanoRociste;
 	
-	
-	
+	private String otvorena;
+		
 	private String nesprovedena;
 	
 	private String zaklucuva;
-	
-	
-	//////////////////
-	
+		
 	private String brisenjeOdCR;
 	
 	private String zapira;
-	
-	
-	
+		
 	private String sobranienaDoveriteli;
+		
+	private int id;
 	
-	private String datum;
-	//////////////////
+	
+	/*String sud, String resenie, String pravnoLice, String edb, String datum, String predStecajna,
+			String statusZakazanoRociste, String otvorena, String nesprovedena, String zaklucuva, String brisenjeOdCR,
+			String zapira, CheckBox check, int id) {*/
 
+	
+	
 	public String getSud() {
 		return sud;
 	}

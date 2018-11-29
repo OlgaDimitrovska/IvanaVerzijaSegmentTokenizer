@@ -29,10 +29,12 @@ public class privSpostapka
 		super();
 	}
 	
+	
+
+	
 	public privSpostapka(String sud, String resenie, String pravnoLice, String edb, String datum, String predStecajna,
 			String statusZakazanoRociste, String otvorena, String nesprovedena, String zaklucuva, String brisenjeOdCR,
-			String zapira, CheckBox check) 
-	{
+			String zapira, CheckBox check, int id) {
 		super();
 		this.sud = sud;
 		this.resenie = resenie;
@@ -47,10 +49,31 @@ public class privSpostapka
 		this.brisenjeOdCR = brisenjeOdCR;
 		this.zapira = zapira;
 		this.check = check;
+		this.id = id;
+	}
+
+	public privSpostapka(String sud, String resenie, String pravnoLice, String edb, String datum, String predStecajna,
+			String statusZakazanoRociste, String otvorena, String nesprovedena, String zaklucuva, String brisenjeOdCR,
+			String zapira, int id) 
+	{
+		super();
+		this.sud = sud;
+		this.resenie = resenie;
+		this.pravnoLice = pravnoLice;
+		this.edb = edb;
+		this.datum = datum;
+		this.predStecajna = predStecajna;
+		this.statusZakazanoRociste = statusZakazanoRociste;
+		this.otvorena = otvorena;
+		this.nesprovedena = nesprovedena;
+		this.zaklucuva = zaklucuva;
+		this.brisenjeOdCR = brisenjeOdCR;
+		this.zapira = zapira;
+		//this.check = check;
+		this.id = id;
 	}
 
 
-	
 	private String sud;
 	
 	private String resenie;
@@ -75,13 +98,25 @@ public class privSpostapka
 	private String brisenjeOdCR;
 	
 	private String zapira;
-	
+		
 	private CheckBox check;
 	
+	private int id;
+	
 		
+
+
 	//////////////////
 
 
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
 
 	public CheckBox getCheck() {
 		return check;

@@ -34,3 +34,15 @@
     -fx-border-radius: 100%;
     -fx-border-width: 5px;
 }
+
+.tabletrajni:focused
+{
+    -fx-background-color: transparent;
+}
+
+.tabletrajni
+{
+  -fx-control-inner-background: skyblue;
+  -fx-accent: derive(-fx-control-inner-background, -40%);
+  -fx-cell-hover-color: derive(-fx-control-inner-background, -20%);
+}

@@ -20,7 +20,7 @@
 			<children>
             <HBox prefHeight="93.0" prefWidth="1347.0" style="-fx-background-color: #00A2D3;">
                <children>
-                  <Label alignment="CENTER" prefHeight="75.0" prefWidth="1088.0" text=" Апликација за извлекување стечајни статуси" textAlignment="CENTER" textFill="#fcf8f8" wrapText="true">
+                  <Label alignment="CENTER" prefHeight="75.0" prefWidth="1403.0" text=" Апликација за извлекување стечајни статуси" textAlignment="CENTER" textFill="#fcf8f8" wrapText="true">
                      <font>
                         <Font name="Ebrima Bold" size="24.0" />
                      </font>
@@ -40,7 +40,7 @@
                         <Insets left="5.0" top="10.0" />
                      </HBox.margin>
       						</ImageView>
-            						<Button fx:id="openButton" contentDisplay="BOTTOM" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" onAction="#ClickedClickMe" prefHeight="56.0" prefWidth="211.0" styleClass="btns" text="Пребарај" textFill="#92959e">
+            						<Button fx:id="openButton" contentDisplay="BOTTOM" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" onAction="#PrebarajPrivremeniPostapki" prefHeight="56.0" prefWidth="211.0" styleClass="btns" text="Пребарај" textFill="#92959e">
             							<font>
             								<Font name="Ebrima" size="16.0" />
             							</font>
@@ -48,13 +48,28 @@
                         <Insets top="5.0" />
                      </HBox.margin>
             						</Button>
+                  <Button fx:id="ispolniBtn" contentDisplay="BOTTOM" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" onAction="#ispolniTrajni" prefHeight="56.0" prefWidth="211.0" styleClass="btns" text="Внеси во трајни ст. по." textFill="#92959e">
+                     <font>
+                        <Font name="Ebrima" size="16.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="prikaziPrivremeni" contentDisplay="BOTTOM" layoutX="55.0" layoutY="15.0" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" onAction="#PrikaziPrivremeniPostapki" prefHeight="56.0" prefWidth="311.0" styleClass="btns" text="Прикажи привремени ст. по." textFill="#92959e">
+                     <font>
+                        <Font name="Ebrima" size="16.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="prikaziTrajni" contentDisplay="BOTTOM" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" onAction="#PrikaziTrajniPostapki" prefHeight="56.0" prefWidth="311.0" styleClass="btns" text="Прикажи трајни ст. по." textFill="#92959e">
+                     <font>
+                        <Font name="Ebrima" size="16.0" />
+                     </font>
+                  </Button>
                </children>
             </HBox>
 			</children>
 		</VBox>
-		<Pane layoutX="14.0" layoutY="386.0" prefHeight="430.0" prefWidth="1300.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+		<Pane fx:id="pane" layoutX="14.0" layoutY="386.0" prefHeight="430.0" prefWidth="1300.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
 			<children>
-				<TableView fx:id="table" layoutX="-4.0" layoutY="-16.0" prefHeight="445.0" prefWidth="1407.0">
+				<TableView fx:id="tablePrivremeni" layoutX="-4.0" layoutY="-16.0" prefHeight="477.0" prefWidth="1407.0">
 					<columns>
 						<TableColumn fx:id="col_sud" prefWidth="248.99996948242188" text="Суд" />
 						<TableColumn fx:id="col_resenie" prefWidth="88.0" text="Ст. бр." />
@@ -71,6 +86,22 @@
 						<TableColumn fx:id="col_check" prefWidth="65.0" style="-fx-alignment: CENTER-RIGHT;" text="Одобри" />
 					</columns>
 				</TableView>
+            <TableView fx:id="tableTrajni" layoutX="-4.0" layoutY="-16.0" prefHeight="477.0" prefWidth="1407.0" stylesheets="@stylesheet.css">
+               <columns>
+                  <TableColumn fx:id="col_sudT" prefWidth="248.99996948242188" text="Суд" />
+                  <TableColumn fx:id="col_resenieT" prefWidth="88.0" text="Ст. бр." />
+                  <TableColumn fx:id="col_pravnoLiceT" prefWidth="120.0" text="Правно лице" />
+                  <TableColumn fx:id="col_edbT" prefWidth="91.0" text="едб" />
+                  <TableColumn fx:id="col_datumT" prefWidth="73.0" text="датум" />
+                  <TableColumn fx:id="col_predStecajnaT" prefWidth="127.0" text="предстечајна" />
+                  <TableColumn fx:id="col_zakazanoRocT" prefWidth="133.0" text="закажано роч." />
+                  <TableColumn fx:id="col_otvorenaT" prefWidth="93.0" text="отворена" />
+                  <TableColumn fx:id="col_nesprovedenaT" prefWidth="108.0" text="неспроведена" />
+                  <TableColumn fx:id="col_zaklucenaT" prefWidth="99.0" text="заклучена" />
+                  <TableColumn fx:id="col_brisenjeOdCRT" prefWidth="122.0" text="бришење од Ц.Р." />
+                  <TableColumn fx:id="col_zaprenaT" prefWidth="105.0" text="запрена" />                  
+               </columns>
+            </TableView>
 			</children>
 		</Pane>
 	</children>

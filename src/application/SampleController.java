@@ -17,6 +17,7 @@ import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.function.Predicate;
 import java.util.Map.Entry;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -40,13 +41,17 @@ import opennlp.tools.namefind.TokenNameFinderModel;
 import opennlp.tools.tokenize.SimpleTokenizer;
 import opennlp.tools.util.Span;
 
-public class SampleController implements Initializable{
+public class SampleController implements Initializable
+{
 	
 	  //@FXML
 	   // private Button openButton;
 	
 	@FXML 
-	private TableView<privSpostapka> table;
+	private TableView<privSpostapka> tablePrivremeni;
+	
+	@FXML 
+	private TableView<sPostapka> tableTrajni;
 	
 	@FXML 
 	private TableColumn<privSpostapka, String> col_sud;
@@ -87,70 +92,84 @@ public class SampleController implements Initializable{
 	@FXML 
 	private TableColumn<privSpostapka, CheckBox> col_check;
 	
+	/////////////////////////////////////////////////////////
 	
-	private ObservableList<privSpostapka> oblist= FXCollections.observableArrayList();
+	@FXML 
+	private TableColumn<sPostapka, String> col_sudT;
 	
-
-	@Override
-	public void initialize(URL arg0, ResourceBundle arg1) 
-	{
-		
-		
-		Connection conn = DBConnector.getConnect();
-		try 
-		{
-			ResultSet rs = conn.createStatement().executeQuery("select sud, resenie, pravnoLice, edb, datum, predStecajna, statusZakazanoRociste, otvorena, nesprovedena, zaklucuva, brisenjeOdCR, zapira from privremeniPostapki");
-			
-			while(rs.next())
-			{
-				CheckBox tmp = new CheckBox(null);
-				oblist.add(new privSpostapka(rs.getString("sud"), rs.getString("resenie"), rs.getString("pravnoLice"),  rs.getString("edb"), rs.getString("datum"), rs.getString("predStecajna"),
-				 rs.getString("statusZakazanoRociste"), rs.getString("otvorena"), rs.getString("nesprovedena"), rs.getString("zaklucuva"), rs.getString("brisenjeOdCR"), rs.getString("zapira"), tmp));
-			}
-			
-		} 
-		catch (SQLException e) 
-		{			
-			e.printStackTrace();
-		}
-		
-		
-		col_sud.setCellValueFactory(new PropertyValueFactory<>("sud"));
-		col_resenie.setCellValueFactory(new PropertyValueFactory<>("resenie"));
-		col_pravnoLice.setCellValueFactory(new PropertyValueFactory<>("pravnoLice"));
-		col_edb.setCellValueFactory(new PropertyValueFactory<>("edb"));
-		
-		col_datum.setCellValueFactory(new PropertyValueFactory<>("datum"));
-		col_predStecajna.setCellValueFactory(new PropertyValueFactory<>("predStecajna"));
-		col_zakazanoRoc.setCellValueFactory(new PropertyValueFactory<>("statusZakazanoRociste"));
-		col_otvorena.setCellValueFactory(new PropertyValueFactory<>("otvorena"));
-		
-		col_nesprovedena.setCellValueFactory(new PropertyValueFactory<>("nesprovedena"));
-		col_zaklucena.setCellValueFactory(new PropertyValueFactory<>("zaklucuva"));
-		col_brisenjeOdCR.setCellValueFactory(new PropertyValueFactory<>("brisenjeOdCR"));
-		col_zaprena.setCellValueFactory(new PropertyValueFactory<>("zapira"));
-		col_check.setCellValueFactory(new PropertyValueFactory<>("check"));
-		
-		
-		table.setItems(oblist);
-					
-	}
+	@FXML 
+	private TableColumn<sPostapka, String> col_resenieT;
 	
+	@FXML 
+	private TableColumn<sPostapka, String> col_pravnoLiceT;
 	
+	@FXML 
+	private TableColumn<sPostapka, String> col_edbT;
 	
+	@FXML 
+	private TableColumn<sPostapka, String> col_datumT;
+	
+	@FXML 
+	private TableColumn<sPostapka, String> col_predStecajnaT;
+	
+	@FXML 
+	private TableColumn<sPostapka, String> col_zakazanoRocT;
+	
+	@FXML 
+	private TableColumn<sPostapka, String> col_otvorenaT;
+	
+	@FXML 
+	private TableColumn<sPostapka, String> col_nesprovedenaT;
+	
+	@FXML 
+	private TableColumn<sPostapka, String> col_zaklucenaT;
+	
+	@FXML 
+	private TableColumn<sPostapka, String> col_brisenjeOdCRT;
+	
+	@FXML 
+	private TableColumn<sPostapka, String> col_zaprenaT;
+	
+		
+	
+	private ObservableList<privSpostapka> oblist= null;	
+	private ObservableList<sPostapka> oblistTrajni= null;
 	
 	private Stage myStage;
+	private ResultSet rs;
+	private ResultSet rsTrajni;
 	
-	public void setStage(Stage stage) {
+
+	
+	private void polniGrid() 
+	{			
+		polnenjeGridPrivremeniOdBaza();					
+	}
+	
+	
+	public void setStage(Stage stage) 
+	{
 	     myStage = stage;
 	}
+	
+	@Override
+	public void initialize(URL location, ResourceBundle resources) 
+	{
+		tablePrivremeni.setVisible(false);
+		tableTrajni.setVisible(false);
+		polnenjeGridPrivremeniOdBaza();
+	}
+
 	  
 	  @FXML
-	    private void ClickedClickMe(ActionEvent event) {
+	    private void PrebarajPrivremeniPostapki(ActionEvent event) {
 	        System.out.println("You clicked me!");
-	        //label.setText("Clicked Try me!!");
+	      
 	        final FileChooser fileChooser = new FileChooser();
 	        File file = fileChooser.showOpenDialog(myStage);
+	        
+	        tablePrivremeni.setVisible(false); 
+	     	tableTrajni.setVisible(false); 
 	        
             if (file != null) 
             {
@@ -168,20 +187,20 @@ public class SampleController implements Initializable{
                  	 
                  	 for(String slucaj : dokument)
      				 {
-
-     					//find(slucaj);
-                 		 //za relativnite 
-                 		 //getResource("/Files/myfile.txt")
-     					//System.out.printf("%n"); 
-                 		 
-     					 //System.out.println(slucaj);
-
-     					find(slucaj);
-     					System.out.printf("%n"); 
-     				
+     					
+                 		findPredstecajni(slucaj);
+                 		findOtvoreni(slucaj);
+                 		findZapreni(slucaj);
+                 		findSobranieNaDoveriteli(slucaj);
+                 		findZakluceniNesprovedeniBriseni(slucaj);
+                 		findZakluceniNesprovedeni(slucaj);
      					 
      				 }
                  	 
+                 	polniGrid();
+                 	tablePrivremeni.setVisible(true); 
+                 	tableTrajni.setVisible(false); 
+					
 					}
 					
 					catch (IOException e1) 
@@ -194,8 +213,8 @@ public class SampleController implements Initializable{
 	        
 	    }
 	  
-		
 		public static List<String> getSlucai(String str) 
+
 		{
 		    List<String> tokens = new ArrayList<>();
 		    
@@ -255,8 +274,7 @@ public class SampleController implements Initializable{
 		
 		}
 	  
-	  
-	  public static LinkedHashMap<String, String> find(String content) throws IOException {
+		public static LinkedHashMap<String, String> find(String content) throws IOException {
 		    
 						
 	        String workingDir = System.getProperty("user.dir");
@@ -328,7 +346,6 @@ public class SampleController implements Initializable{
 	   
 	}
 	  
-	  
 		private static void insertiranje(sPostapka tmpStecPost) throws SQLException
 		{
 			 try 
@@ -337,7 +354,7 @@ public class SampleController implements Initializable{
 				
 				PreparedStatement prep = DBConnector.getConnect().prepareStatement("INSERT INTO privremeniPostapki(sud, resenie, dolznik, pravnoLice, edb, stecaenUpravnik, imeStecUpr, dooel, uvozizvoz, drustvo, dejnost, predStecajna, otvorena, statusZakazanoRociste, nesprovedena, zaklucuva, brisenjeOdCR, zapira, sobranieNaDoveriteli, datum) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 				prep.setString(1, tmpStecPost.getSud());
-				prep.setString(2, tmpStecPost.getResenie());
+				prep.setString(2, tmpStecPost.getResenie().trim());
 				prep.setString(3, tmpStecPost.getDolznik());
 				prep.setString(4, tmpStecPost.getPravnoLice());
 				prep.setString(5, tmpStecPost.getEdb());
@@ -365,13 +382,16 @@ public class SampleController implements Initializable{
 			 
 			 catch (Exception e) 
 			 {
-				
-				e.printStackTrace();
+				  System.out.println("Probajte povtorno, error pri zapis u baza!");
+				  if(tmpStecPost.getResenie().contains("58/"))
+					{
+						e.printStackTrace();
+					}
+				//e.printStackTrace();
 			}
 			
 
 		}
-	  
 	  
 		private static void parsingRegex(String content, sPostapka tmpStecPost)
 		{
@@ -387,7 +407,7 @@ public class SampleController implements Initializable{
 			startIndex=content.indexOf("Ст.");
 			end=content.indexOf("година");
 						
-			if(startIndex < end)
+			if((startIndex < end) && (startIndex >=0) && (end >=0))
 			{
 				String izmegu = content.substring(startIndex, end);
 				String listaZborcinja[] = izmegu.split(" ");
@@ -515,8 +535,6 @@ public class SampleController implements Initializable{
 			
 		}
 		
-	  
-	  
 		public static String PDFtoTEXT(String pateka) throws IOException{			
 			 
 			  File file = new File(pateka);
@@ -531,5 +549,687 @@ public class SampleController implements Initializable{
 		      return text;
 
 		}
+		
+		public static LinkedHashMap<String, String> findPredstecajni(String content) throws IOException {
+		    
+			
+	        String workingDir = System.getProperty("user.dir");
 
+	        Path filePath = Paths.get(workingDir+File.separator+"\\src\\Files\\predstecajni-ner-model.bin");
+
+	      	InputStream is= new  FileInputStream(filePath.toString());
+	    	
+			 
+			TokenNameFinderModel model = new TokenNameFinderModel(is);
+		    is.close();
+		    		     
+		    NameFinderME nameFinder = new NameFinderME(model);
+	        
+	        String[] tokens = SimpleTokenizer.INSTANCE.tokenize(content);
+	        
+	        LinkedHashMap<String, String> settt = new LinkedHashMap<String, String>();
+	        
+	        Span spans[] = nameFinder.find(tokens);
+	        
+	      
+	        
+	        if(spans.length == 0)
+	        {
+	        	System.out.println("nema tag");
+	        }
+	        else
+	        {
+	        	
+	        	String spans2[]= new String[spans.length-1];
+	        	
+		        for (int i=0; i<spans.length-1; ++i) {
+		            spans2[i] =spans[i].toString();
+		        }
+
+	        	String[] names = Span.spansToStrings(spans, tokens);      
+	        
+		        for(int j=0;j<spans2.length-1;j++) {
+		        	
+		        	settt.put(spans2[j], names[j]);
+		        	
+		        }
+	        
+	        //momentalno kreiran objekt za punenje postapka u baza, prazen, u for polnet
+		        	sPostapka tmpStecPost = new sPostapka();
+		        	
+		        	parsingRegex( content, tmpStecPost);
+		        	
+		        	/*if(tmpStecPost.getResenie().contains("58/"))
+		        	{
+		        		System.out.println("Content: "+ content);
+		        	}
+		        	
+		        	System.out.println("resenie: "+ tmpStecPost.getResenie());
+		        	*/
+		        	
+		        for (Entry<String, String> entry : settt.entrySet()) {
+		            System.out.println(entry.getKey().toString()+" : "+entry.getValue().toString());
+		             
+		            parsing(entry.getKey().toString(), entry.getValue().toString(), tmpStecPost);
+		        }
+		        
+		      
+		        try {
+					insertiranje(tmpStecPost);
+				} catch (SQLException e) {
+					System.out.println("Probajte povtorno, error pri zapis u baza!");
+					if(tmpStecPost.getResenie().contains("58/"))
+					{
+						e.printStackTrace();
+					}
+					//e.printStackTrace();
+				}
+		        
+		        
+	        }
+	        
+	        return settt;
+	        
+	        
+	   
+	}
+		
+		public static LinkedHashMap<String, String> findOtvoreni(String content) throws IOException {
+		    
+			
+	        String workingDir = System.getProperty("user.dir");
+
+	        Path filePath = Paths.get(workingDir+File.separator+"\\src\\Files\\otvoreni-ner-model.bin");
+
+	      	InputStream is= new  FileInputStream(filePath.toString());
+	    	
+			 
+			TokenNameFinderModel model = new TokenNameFinderModel(is);
+		    is.close();
+		    		     
+		    NameFinderME nameFinder = new NameFinderME(model);
+	        
+	        String[] tokens = SimpleTokenizer.INSTANCE.tokenize(content);
+	        
+	        LinkedHashMap<String, String> settt = new LinkedHashMap<String, String>();
+	        
+	        Span spans[] = nameFinder.find(tokens);
+	        
+	      
+	        
+	        if(spans.length == 0)
+	        {
+	        	System.out.println("nema tag");
+	        }
+	        else
+	        {
+	        	
+	        	String spans2[]= new String[spans.length-1];
+	        	
+		        for (int i=0; i<spans.length-1; ++i) {
+		            spans2[i] =spans[i].toString();
+		        }
+
+	        	String[] names = Span.spansToStrings(spans, tokens);      
+	        
+		        for(int j=0;j<spans2.length-1;j++) {
+		        	
+		        	settt.put(spans2[j], names[j]);
+		        	
+		        }
+	        
+	        //momentalno kreiran objekt za punenje postapka u baza, prazen, u for polnet
+		        	sPostapka tmpStecPost = new sPostapka();
+		        	
+		        	parsingRegex( content, tmpStecPost);
+		        	
+		        for (Entry<String, String> entry : settt.entrySet()) {
+		            System.out.println(entry.getKey().toString()+" : "+entry.getValue().toString());
+		             
+		            parsing(entry.getKey().toString(), entry.getValue().toString(), tmpStecPost);
+		        }
+		        
+		      
+		        try {
+					insertiranje(tmpStecPost);
+				} catch (SQLException e) {
+					//System.out.println("Probajte povtorno, error pri zapis u baza!");
+					e.printStackTrace();
+				}
+		        
+		        
+	        }
+	        
+	        return settt;
+	        
+	        
+	   
+	}
+
+		public static LinkedHashMap<String, String> findZapreni(String content) throws IOException {
+		    
+						
+	        String workingDir = System.getProperty("user.dir");
+
+	        Path filePath = Paths.get(workingDir+File.separator+"\\src\\Files\\zapr.bin");
+
+	      	InputStream is= new  FileInputStream(filePath.toString());
+	    	
+			 
+			TokenNameFinderModel model = new TokenNameFinderModel(is);
+		    is.close();
+		    		     
+		    NameFinderME nameFinder = new NameFinderME(model);
+	        
+	        String[] tokens = SimpleTokenizer.INSTANCE.tokenize(content);
+	        
+	        LinkedHashMap<String, String> settt = new LinkedHashMap<String, String>();
+	        
+	        Span spans[] = nameFinder.find(tokens);
+	        
+	      
+	        
+	        if(spans.length == 0)
+	        {
+	        	System.out.println("nema tag");
+	        }
+	        else
+	        {
+	        	
+	        	String spans2[]= new String[spans.length-1];
+	        	
+		        for (int i=0; i<spans.length-1; ++i) {
+		            spans2[i] =spans[i].toString();
+		        }
+
+	        	String[] names = Span.spansToStrings(spans, tokens);      
+	        
+		        for(int j=0;j<spans2.length-1;j++) {
+		        	
+		        	settt.put(spans2[j], names[j]);
+		        	
+		        }
+	        
+	        //momentalno kreiran objekt za punenje postapka u baza, prazen, u for polnet
+		        	sPostapka tmpStecPost = new sPostapka();
+		        	
+		        	parsingRegex( content, tmpStecPost);
+		        	
+		        for (Entry<String, String> entry : settt.entrySet()) {
+		            System.out.println(entry.getKey().toString()+" : "+entry.getValue().toString());
+		             
+		            parsing(entry.getKey().toString(), entry.getValue().toString(), tmpStecPost);
+		        }
+		        
+		      
+		        try {
+					insertiranje(tmpStecPost);
+				} catch (SQLException e) {
+					//System.out.println("Probajte povtorno, error pri zapis u baza!");
+					e.printStackTrace();
+				}
+		        
+		        
+	        }
+	        
+	        return settt;
+	        
+	        
+	   
+	}
+		
+	public static LinkedHashMap<String, String> findSobranieNaDoveriteli(String content) throws IOException {
+    
+	
+    String workingDir = System.getProperty("user.dir");
+
+    Path filePath = Paths.get(workingDir+File.separator+"\\src\\Files\\SobrDover.bin");
+
+  	InputStream is= new  FileInputStream(filePath.toString());
+	
+	 
+	TokenNameFinderModel model = new TokenNameFinderModel(is);
+    is.close();
+    		     
+    NameFinderME nameFinder = new NameFinderME(model);
+    
+    String[] tokens = SimpleTokenizer.INSTANCE.tokenize(content);
+    
+    LinkedHashMap<String, String> settt = new LinkedHashMap<String, String>();
+    
+    Span spans[] = nameFinder.find(tokens);
+    
+  
+    
+    if(spans.length == 0)
+    {
+    	System.out.println("nema tag");
+    }
+    else
+    {
+    	
+    	String spans2[]= new String[spans.length-1];
+    	
+        for (int i=0; i<spans.length-1; ++i) {
+            spans2[i] =spans[i].toString();
+        }
+
+    	String[] names = Span.spansToStrings(spans, tokens);      
+    
+        for(int j=0;j<spans2.length-1;j++) {
+        	
+        	settt.put(spans2[j], names[j]);
+        	
+        }
+    
+    //momentalno kreiran objekt za punenje postapka u baza, prazen, u for polnet
+        	sPostapka tmpStecPost = new sPostapka();
+        	
+        	parsingRegex( content, tmpStecPost);
+        	
+        for (Entry<String, String> entry : settt.entrySet()) {
+            System.out.println(entry.getKey().toString()+" : "+entry.getValue().toString());
+             
+            parsing(entry.getKey().toString(), entry.getValue().toString(), tmpStecPost);
+        }
+        
+      
+        try {
+			insertiranje(tmpStecPost);
+		} catch (SQLException e) {
+			//System.out.println("Probajte povtorno, error pri zapis u baza!");
+			e.printStackTrace();
+		}
+        
+        
+    }
+    
+    return settt;
+    
+    
+
+}
+		
+	public static LinkedHashMap<String, String> findZakluceniNesprovedeniBriseni(String content) throws IOException {
+    
+	
+    String workingDir = System.getProperty("user.dir");
+
+    Path filePath = Paths.get(workingDir+File.separator+"\\src\\Files\\zaklucNesprBr-ner-model.bin");
+
+  	InputStream is= new  FileInputStream(filePath.toString());
+	
+	 
+	TokenNameFinderModel model = new TokenNameFinderModel(is);
+    is.close();
+    		     
+    NameFinderME nameFinder = new NameFinderME(model);
+    
+    String[] tokens = SimpleTokenizer.INSTANCE.tokenize(content);
+    
+    LinkedHashMap<String, String> settt = new LinkedHashMap<String, String>();
+    
+    Span spans[] = nameFinder.find(tokens);
+    
+  
+    
+    if(spans.length == 0)
+    {
+    	System.out.println("nema tag");
+    }
+    else
+    {
+    	
+    	String spans2[]= new String[spans.length-1];
+    	
+        for (int i=0; i<spans.length-1; ++i) {
+            spans2[i] =spans[i].toString();
+        }
+
+    	String[] names = Span.spansToStrings(spans, tokens);      
+    
+        for(int j=0;j<spans2.length-1;j++) {
+        	
+        	settt.put(spans2[j], names[j]);
+        	
+        }
+    
+    //momentalno kreiran objekt za punenje postapka u baza, prazen, u for polnet
+        	sPostapka tmpStecPost = new sPostapka();
+        	
+        	parsingRegex( content, tmpStecPost);
+        	
+        for (Entry<String, String> entry : settt.entrySet()) {
+            System.out.println(entry.getKey().toString()+" : "+entry.getValue().toString());
+             
+            parsing(entry.getKey().toString(), entry.getValue().toString(), tmpStecPost);
+        }
+        
+      
+        try {
+			insertiranje(tmpStecPost);
+		} catch (SQLException e) {
+			//System.out.println("Probajte povtorno, error pri zapis u baza!");
+			e.printStackTrace();
+		}
+        
+        
+    }
+    
+    return settt;
+    
+    
+
+}
+		
+	public static LinkedHashMap<String, String> findZakluceniNesprovedeni(String content) throws IOException {
+    
+	
+    String workingDir = System.getProperty("user.dir");
+
+    Path filePath = Paths.get(workingDir+File.separator+"\\src\\Files\\zaklucNespr-ner-model.bin");
+
+  	InputStream is= new  FileInputStream(filePath.toString());
+	
+	 
+	TokenNameFinderModel model = new TokenNameFinderModel(is);
+    is.close();
+    		     
+    NameFinderME nameFinder = new NameFinderME(model);
+    
+    String[] tokens = SimpleTokenizer.INSTANCE.tokenize(content);
+    
+    LinkedHashMap<String, String> settt = new LinkedHashMap<String, String>();
+    
+    Span spans[] = nameFinder.find(tokens);
+    
+  
+    
+    if(spans.length == 0)
+    {
+    	System.out.println("nema tag");
+    }
+    else
+    {
+    	
+    	String spans2[]= new String[spans.length-1];
+    	
+        for (int i=0; i<spans.length-1; ++i) {
+            spans2[i] =spans[i].toString();
+        }
+
+    	String[] names = Span.spansToStrings(spans, tokens);      
+    
+        for(int j=0;j<spans2.length-1;j++) {
+        	
+        	settt.put(spans2[j], names[j]);
+        	
+        }
+    
+    //momentalno kreiran objekt za punenje postapka u baza, prazen, u for polnet
+        	sPostapka tmpStecPost = new sPostapka();
+        	
+        	parsingRegex( content, tmpStecPost);
+        	
+        for (Entry<String, String> entry : settt.entrySet()) {
+            System.out.println(entry.getKey().toString()+" : "+entry.getValue().toString());
+             
+            parsing(entry.getKey().toString(), entry.getValue().toString(), tmpStecPost);
+        }
+        
+      
+        try {
+			insertiranje(tmpStecPost);
+		} catch (SQLException e) {
+			//System.out.println("Probajte povtorno, error pri zapis u baza!");
+			e.printStackTrace();
+		}
+        
+        
+    }
+    
+    return settt;
+    
+    
+
+}
+		
+		
+	private void polnenjeGridPrivremeniOdBaza()
+		{
+			Connection conn = DBConnector.getConnect();
+			oblist = FXCollections.observableArrayList();
+			//ova e za novo vcituvanje
+			try 
+			{
+				rs = conn.createStatement().executeQuery("select id, sud, resenie, pravnoLice, edb, datum, predStecajna, statusZakazanoRociste, otvorena, nesprovedena, zaklucuva, brisenjeOdCR, zapira from privremeniPostapki");
+				
+				while(rs.next())
+				{
+					CheckBox tmp = new CheckBox(null);
+					oblist.add(new privSpostapka(rs.getString("sud"), rs.getString("resenie"), rs.getString("pravnoLice"),  rs.getString("edb"), rs.getString("datum"), rs.getString("predStecajna"),
+					 rs.getString("statusZakazanoRociste"), rs.getString("otvorena"), rs.getString("nesprovedena"), rs.getString("zaklucuva"), rs.getString("brisenjeOdCR"), rs.getString("zapira"), tmp, rs.getInt("id")));
+				}
+				
+			} 
+			catch (SQLException e) 
+			{			
+				e.printStackTrace();
+			}
+			
+			
+			col_sud.setCellValueFactory(new PropertyValueFactory<>("sud"));
+			col_resenie.setCellValueFactory(new PropertyValueFactory<>("resenie"));
+			col_pravnoLice.setCellValueFactory(new PropertyValueFactory<>("pravnoLice"));
+			col_edb.setCellValueFactory(new PropertyValueFactory<>("edb"));
+			
+			col_datum.setCellValueFactory(new PropertyValueFactory<>("datum"));
+			col_predStecajna.setCellValueFactory(new PropertyValueFactory<>("predStecajna"));
+			col_zakazanoRoc.setCellValueFactory(new PropertyValueFactory<>("statusZakazanoRociste"));
+			col_otvorena.setCellValueFactory(new PropertyValueFactory<>("otvorena"));
+			
+			col_nesprovedena.setCellValueFactory(new PropertyValueFactory<>("nesprovedena"));
+			col_zaklucena.setCellValueFactory(new PropertyValueFactory<>("zaklucuva"));
+			col_brisenjeOdCR.setCellValueFactory(new PropertyValueFactory<>("brisenjeOdCR"));
+			col_zaprena.setCellValueFactory(new PropertyValueFactory<>("zapira"));
+			col_check.setCellValueFactory(new PropertyValueFactory<>("check"));
+			
+			
+			tablePrivremeni.setItems(oblist);
+		}
+	
+	private void polnenjeGridTrajni()
+	{
+		Connection conn = DBConnector.getConnect();
+		oblistTrajni = FXCollections.observableArrayList();
+		try 
+		{
+			rsTrajni = conn.createStatement().executeQuery("select id, sud, resenie, pravnoLice, edb, datum, predStecajna, statusZakazanoRociste, otvorena, nesprovedena, zaklucuva, brisenjeOdCR, zapira from trajniPostapki");
+			
+			while(rsTrajni.next())
+			{
+				System.out.println("Dali vlaga tuka");
+				oblistTrajni.add(new sPostapka(rsTrajni.getString("sud"), rsTrajni.getString("resenie"), rsTrajni.getString("pravnoLice"),  rsTrajni.getString("edb"), rsTrajni.getString("datum"), rsTrajni.getString("predStecajna"),
+				 rsTrajni.getString("statusZakazanoRociste"), rsTrajni.getString("otvorena"), rsTrajni.getString("nesprovedena"), rsTrajni.getString("zaklucuva"), rsTrajni.getString("brisenjeOdCR"), rsTrajni.getString("zapira"), rsTrajni.getInt("id")));
+			}
+			
+		} 
+		catch (SQLException e) 
+		{			
+			e.printStackTrace();
+		}
+		
+		
+		col_sudT.setCellValueFactory(new PropertyValueFactory<>("sud"));
+		col_resenieT.setCellValueFactory(new PropertyValueFactory<>("resenie"));
+		col_pravnoLiceT.setCellValueFactory(new PropertyValueFactory<>("pravnoLice"));
+		col_edbT.setCellValueFactory(new PropertyValueFactory<>("edb"));
+		
+		col_datumT.setCellValueFactory(new PropertyValueFactory<>("datum"));
+		col_predStecajnaT.setCellValueFactory(new PropertyValueFactory<>("predStecajna"));
+		col_zakazanoRocT.setCellValueFactory(new PropertyValueFactory<>("statusZakazanoRociste"));
+		col_otvorenaT.setCellValueFactory(new PropertyValueFactory<>("otvorena"));
+		
+		col_nesprovedenaT.setCellValueFactory(new PropertyValueFactory<>("nesprovedena"));
+		col_zaklucenaT.setCellValueFactory(new PropertyValueFactory<>("zaklucuva"));
+		col_brisenjeOdCRT.setCellValueFactory(new PropertyValueFactory<>("brisenjeOdCR"));
+		col_zaprenaT.setCellValueFactory(new PropertyValueFactory<>("zapira"));
+		
+		
+		
+		tableTrajni.setItems(oblistTrajni);
+	}
+	
+	private void polnenjeGridPrivremeniOdSet()
+	{
+		/*
+		Connection conn = DBConnector.getConnect();
+		
+		//ova e za novo vcituvanje
+		try 
+		{
+			rs = conn.createStatement().executeQuery("select id, sud, resenie, pravnoLice, edb, datum, predStecajna, statusZakazanoRociste, otvorena, nesprovedena, zaklucuva, brisenjeOdCR, zapira from privremeniPostapki");
+			
+			while(rs.next())
+			{
+				CheckBox tmp = new CheckBox(null);
+				oblist.add(new privSpostapka(rs.getString("sud"), rs.getString("resenie"), rs.getString("pravnoLice"),  rs.getString("edb"), rs.getString("datum"), rs.getString("predStecajna"),
+				 rs.getString("statusZakazanoRociste"), rs.getString("otvorena"), rs.getString("nesprovedena"), rs.getString("zaklucuva"), rs.getString("brisenjeOdCR"), rs.getString("zapira"), tmp, rs.getInt("id")));
+			}
+			
+		} 
+		catch (SQLException e) 
+		{			
+			e.printStackTrace();
+		}
+		
+		
+		col_sud.setCellValueFactory(new PropertyValueFactory<>("sud"));
+		col_resenie.setCellValueFactory(new PropertyValueFactory<>("resenie"));
+		col_pravnoLice.setCellValueFactory(new PropertyValueFactory<>("pravnoLice"));
+		col_edb.setCellValueFactory(new PropertyValueFactory<>("edb"));
+		
+		col_datum.setCellValueFactory(new PropertyValueFactory<>("datum"));
+		col_predStecajna.setCellValueFactory(new PropertyValueFactory<>("predStecajna"));
+		col_zakazanoRoc.setCellValueFactory(new PropertyValueFactory<>("statusZakazanoRociste"));
+		col_otvorena.setCellValueFactory(new PropertyValueFactory<>("otvorena"));
+		
+		col_nesprovedena.setCellValueFactory(new PropertyValueFactory<>("nesprovedena"));
+		col_zaklucena.setCellValueFactory(new PropertyValueFactory<>("zaklucuva"));
+		col_brisenjeOdCR.setCellValueFactory(new PropertyValueFactory<>("brisenjeOdCR"));
+		col_zaprena.setCellValueFactory(new PropertyValueFactory<>("zapira"));
+		col_check.setCellValueFactory(new PropertyValueFactory<>("check"));
+		*/
+		
+		tablePrivremeni.setItems(oblist);
+	}
+
+
+@FXML
+public void ispolniTrajni(ActionEvent event)
+{
+	
+	ObservableList<privSpostapka> lista = tablePrivremeni.getItems();
+	
+	ArrayList<Integer> listaIDzaDelete = new ArrayList<Integer>();
+	
+	
+	for(int i=0; i<lista.size(); i++)
+	{
+		if(lista.get(i).getCheck().isSelected())
+		{
+			//tuka insert od prevremeniPostapki vo trajniPostapki
+			System.out.println("ZNACI GI PRINTA: " + lista.get(i).getId());
+			System.out.println("Kolkava e listata: " + lista.size());
+			
+			 try 
+			 {		
+				 //da gi vnese shtiklirani vo trajni
+				System.out.println("Database Name: " + DBConnector.getConnect().getMetaData().getDatabaseProductName());
+				
+				PreparedStatement prep = DBConnector.getConnect().prepareStatement("insert into trajniPostapki select sud, resenie, dolznik, pravnoLice, edb, 	stecaenUpravnik, imeStecUpr, dooel, uvozizvoz, drustvo, dejnost, predStecajna, otvorena, statusZakazanoRociste, nesprovedena, zaklucuva, brisenjeOdCR, zapira, sobranieNaDoveriteli, datum from privremeniPostapki where privremeniPostapki.id=?");
+				prep.setInt(1, lista.get(i).getId());				
+				prep.executeUpdate();
+				
+				listaIDzaDelete.add(lista.get(i).getId());
+				
+				
+				
+				
+			} 
+			 
+			 catch (Exception e) 
+			 {
+				  System.out.println("Probajte povtorno, error pri insert u baza trajniPostapki!");
+				
+				//e.printStackTrace();
+			 }
+			 
+			 
+		}
+	}
+	
+	Predicate<privSpostapka> postapkaPredicate = p-> p.getCheck().isSelected();
+	lista.removeIf(postapkaPredicate);
+	
+	for(Integer j : listaIDzaDelete)
+	{
+		System.out.println("ID za brisenje "+ j);
+		
+		try 
+		{
+			//da gi trgne stikliranite od privremeni vo tabelata				
+			PreparedStatement prepDelete = DBConnector.getConnect().prepareStatement("delete from privremeniPostapki where privremeniPostapki.id=?");
+			prepDelete.setInt(1, j);
+			prepDelete.executeUpdate();
+			
+						
+			
+		}
+
+		catch (Exception e) 
+		{
+			System.out.println("Probajte povtorno, error pri delete od privremeniPostapki!");	
+			//e.printStackTrace();
+		}
+		
+		
+		
+	}
+
+	listaIDzaDelete.clear();
+	polnenjeGridTrajni();	
+	tablePrivremeni.setVisible(false); 
+ 	tableTrajni.setVisible(true); 
+	
+	
+	
+	
+
+	
+}
+
+@FXML
+public void PrikaziPrivremeniPostapki(ActionEvent event)
+{
+	tablePrivremeni.setVisible(true); 
+ 	tableTrajni.setVisible(false); 
+ 	polnenjeGridPrivremeniOdSet();
+}
+
+@FXML
+public void PrikaziTrajniPostapki(ActionEvent event)
+{
+	tablePrivremeni.setVisible(false); 
+ 	tableTrajni.setVisible(true); 
+	polnenjeGridTrajni();
+}
+
+
+
+
+
+
+
+		
 }
