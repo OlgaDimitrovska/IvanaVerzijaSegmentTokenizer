@@ -32,7 +32,7 @@ public class sPostapka
 		sb.append("zaklucuva: "+zaklucuva+" ");
 		sb.append("brisenjeOdCR: "+brisenjeOdCR+" ");
 		sb.append("zapira: "+zapira+" ");
-		sb.append("sobranienaDoveriteli: "+sobranienaDoveriteli+" ");
+		sb.append("Embs: "+embs+" ");
 		sb.append("datum: "+datum+" ");		
 		
 		
@@ -57,6 +57,40 @@ public class sPostapka
 		this.zapira = zapira;
 		this.id = id;
 	}
+	
+	public sPostapka(String sud, String resenie, String pravnoLice, String edb, String datum, String predStecajna,
+			String statusZakazanoRociste, String otvorena, String nesprovedena, String zaklucuva, String brisenjeOdCR,
+			String zapira, String embs, int id) {
+		super();
+		this.sud = sud;
+		this.resenie = resenie;
+		this.pravnoLice = pravnoLice;
+		this.edb = edb;
+		this.datum = datum;
+		this.predStecajna = predStecajna;
+		this.statusZakazanoRociste = statusZakazanoRociste;
+		this.otvorena = otvorena;
+		this.nesprovedena = nesprovedena;
+		this.zaklucuva = zaklucuva;
+		this.brisenjeOdCR = brisenjeOdCR;
+		this.zapira = zapira;
+		this.embs = embs;
+		this.id = id;
+	}
+	
+
+
+
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+
 
 	private String sud;
 	
@@ -96,8 +130,10 @@ public class sPostapka
 	
 	private String zapira;
 		
-	private String sobranienaDoveriteli;
-		
+	private String embs;
+	
+	private String sobranie;
+
 	private int id;
 	
 	
@@ -255,18 +291,17 @@ public class sPostapka
 		this.zapira = zapira;
 	}
 
+	public String getEmbs() {
+		return embs;
+	}
 
-	public String getSobranienaDoveriteli() {
-		return sobranienaDoveriteli;
+	public void setEmbs(String embs) {
+		this.embs = embs;
 	}
 
 	public sPostapka() {
 		super();
 		
-	}
-
-	public void setSobranienaDoveriteli(String sobranienaDoveriteli) {
-		this.sobranienaDoveriteli = sobranienaDoveriteli;
 	}
 
 	public String getDatum() {
@@ -275,6 +310,14 @@ public class sPostapka
 
 	public void setDatum(String datum) {
 		this.datum = datum;
+	}
+	
+	public String getSobranie() {
+		return sobranie;
+	}
+
+	public void setSobranie(String sobranie) {
+		this.sobranie = sobranie;
 	}
 
 	

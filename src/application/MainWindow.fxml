@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="600.0" prefWidth="1400.0" styleClass="parent" stylesheets="@style.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.MainWindowController">
+	<children>
+		<VBox prefHeight="150.0" prefWidth="1400.0" styleClass="sidebar">
+			<children>
+            <HBox prefHeight="82.0" prefWidth="1400.0" style="-fx-background-color: #00A2D3;">
+               <children>
+                  <Label alignment="CENTER" prefHeight="76.0" prefWidth="1400.0" text=" Апликација за извлекување стечајни статуси" textAlignment="CENTER" textFill="#fcf8f8" wrapText="true">
+                     <font>
+                        <Font name="Ebrima Bold" size="24.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+            <HBox prefHeight="68.0" prefWidth="1400.0">
+               <children>
+                  <VBox prefHeight="200.0" prefWidth="100.0">
+                     <children>
+                        <RadioButton fx:id="edinPdf" mnemonicParsing="false" text="Ед. пдф" textFill="#f5eeee">
+                           <font>
+                              <Font name="Ebrima" size="12.0" />
+                           </font>
+                           <toggleGroup>
+                              <ToggleGroup fx:id="togPdf" />
+                           </toggleGroup>
+                        </RadioButton>
+                        <Region prefHeight="23.0" prefWidth="88.0" />
+                        <RadioButton fx:id="pluralPdf" mnemonicParsing="false" text="Повеќе пдф" textFill="#ebe4e4" toggleGroup="$togPdf" />
+                     </children>
+                  </VBox>
+            						<Button fx:id="openButton" contentDisplay="BOTTOM" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" onAction="#PrebarajPrivremeniPostapki" prefHeight="68.0" prefWidth="211.0" styleClass="btns" text="Избери службен весник" textFill="#92959e">
+            							<font>
+            								<Font name="Ebrima" size="16.0" />
+            							</font>
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+            						</Button>
+                  <ToggleButton fx:id="prikaziPrivremeni" mnemonicParsing="false" onAction="#PrikaziPrivremeniPostapki" prefHeight="67.0" prefWidth="248.0" styleClass="btns_toggle" text="Привремени &#10;стечајни постапки" textAlignment="CENTER" textFill="#92959e" wrapText="true">
+                     <font>
+                        <Font name="Ebrima" size="16.0" />
+                     </font>
+                     <toggleGroup>
+                        <ToggleGroup fx:id="tog" />
+                     </toggleGroup></ToggleButton>
+                  <ToggleButton fx:id="prikaziTrajni" mnemonicParsing="false" onAction="#PrikaziTrajniPostapki" prefHeight="67.0" prefWidth="227.0" styleClass="btns_toggle" text="Трајни &#10;стечајни постапки" textAlignment="CENTER" textFill="#92959e" toggleGroup="$tog">
+                     <font>
+                        <Font name="Ebrima" size="16.0" />
+                     </font></ToggleButton>
+                  <Region prefHeight="68.0" prefWidth="321.0" />
+                  <ImageView fx:id="lupa" fitHeight="34.0" fitWidth="27.0" pickOnBounds="true" preserveRatio="true">
+                     <HBox.margin>
+                        <Insets left="10.0" top="20.0" />
+                     </HBox.margin>
+                     <image>
+                        <Image url="@../Images/probaj.png" />
+                     </image>
+                  </ImageView>
+                  <Region prefHeight="63.0" prefWidth="16.0" />
+                  <TextField fx:id="txtEdb" onAction="#onEnter" prefHeight="25.0" prefWidth="218.0">
+                     <HBox.margin>
+                        <Insets top="20.0" />
+                     </HBox.margin>
+                  </TextField>
+                  <VBox prefHeight="68.0" prefWidth="108.0">
+                     <children>
+                        <RadioButton fx:id="rbEdmb" mnemonicParsing="false" onAction="#kliknatoEdmb" text="ЕДБ" textFill="#f2ecec">
+                           <font>
+                              <Font name="Ebrima" size="14.0" />
+                           </font>
+                           <padding>
+                              <Insets top="5.0" />
+                           </padding>
+                           <toggleGroup>
+                              <ToggleGroup fx:id="togE" />
+                           </toggleGroup>
+                        </RadioButton>
+                        <Region prefHeight="22.0" prefWidth="120.0">
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                           <VBox.margin>
+                              <Insets left="5.0" />
+                           </VBox.margin>
+                        </Region>
+                        <RadioButton fx:id="rbEmbs" mnemonicParsing="false" onAction="#kliknatoEmbs" text="ЕМБС" textFill="#f2f2f2" toggleGroup="$togE">
+                           <font>
+                              <Font name="Ebrima" size="14.0" />
+                           </font>
+                           <padding>
+                              <Insets bottom="5.0" />
+                           </padding>
+                        </RadioButton>
+                     </children>
+                     <HBox.margin>
+                        <Insets left="5.0" />
+                     </HBox.margin>
+                  </VBox>
+               </children>
+            </HBox>
+			</children>
+		</VBox>
+		<Pane fx:id="pane" layoutX="14.0" layoutY="386.0" prefHeight="430.0" prefWidth="1300.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+			<children>
+            <AnchorPane fx:id="trajni" layoutY="-21.0" prefHeight="451.0" prefWidth="1400.0" styleClass="pane-selected">
+               <children>
+                  <TableView fx:id="tableTrajni" prefHeight="451.0" prefWidth="1400.0" styleClass="tableTrajni" stylesheets="@style.css">
+                     <columns>
+                        <TableColumn fx:id="col_sudT" prefWidth="198.99996948242188" text="Суд" />
+                        <TableColumn fx:id="col_resenieT" prefWidth="68.0" text="Ст. бр." />
+                         <TableColumn fx:id="col_embsT" prefWidth="70.0" text="Ембс" />
+                        <TableColumn fx:id="col_pravnoLiceT" prefWidth="120.0" text="Правно лице" />
+                        <TableColumn fx:id="col_edbT" prefWidth="91.0" text="Eдб" />
+                        <TableColumn fx:id="col_datumT" prefWidth="73.0" text="датум" />
+                        <TableColumn fx:id="col_predStecajnaT" prefWidth="127.0" text="предстечајна" />
+                        <TableColumn fx:id="col_zakazanoRocT" prefWidth="133.0" text="закажано роч." />
+                        <TableColumn fx:id="col_otvorenaT" prefWidth="93.0" text="отворена" />
+                        <TableColumn fx:id="col_nesprovedenaT" prefWidth="108.0" text="неспроведена" />
+                        <TableColumn fx:id="col_zaklucenaT" prefWidth="99.0" text="заклучена" />
+                        <TableColumn fx:id="col_brisenjeOdCRT" prefWidth="122.0" text="бришење од Ц.Р." />
+                        <TableColumn fx:id="col_zaprenaT" prefWidth="105.0" text="запрена" />                  
+                     </columns>
+                  </TableView>
+               </children>
+            </AnchorPane>
+            <AnchorPane fx:id="privremeni" layoutY="-21.0" prefHeight="451.0" prefWidth="1400.0" styleClass="pane-selected">
+               <children>
+      				<TableView fx:id="tablePrivremeni" prefHeight="404.0" prefWidth="1400.0" styleClass="tablePrivremeni" stylesheets="@style.css">
+      					<columns>
+      					<TableColumn fx:id="col_check" prefWidth="40.0" style="-fx-alignment: CENTER-RIGHT;" text="Одобри" />
+      						<TableColumn fx:id="col_sud" prefWidth="188.99996948242188" text="Суд" />
+      						<TableColumn fx:id="col_resenie" prefWidth="88.0" text="Ст. бр." />
+      						<TableColumn fx:id="col_pravnoLice" prefWidth="120.0" text="Правно лице" />
+      						<TableColumn fx:id="col_embs" prefWidth="80.0" text="ембс" />
+      						<TableColumn fx:id="col_edb" prefWidth="91.0" text="едб" />
+      						<TableColumn fx:id="col_datum" prefWidth="73.0" text="датум" />
+      						<TableColumn fx:id="col_predStecajna" prefWidth="117.0" text="предстечајна" />
+      						<TableColumn fx:id="col_zakazanoRoc" prefWidth="123.0" text="закажано роч." />
+      						<TableColumn fx:id="col_otvorena" prefWidth="83.0" text="отворена" />
+      						<TableColumn fx:id="col_nesprovedena" prefWidth="98.0" text="неспроведена" />
+      						<TableColumn fx:id="col_zaklucena" prefWidth="89.0" text="заклучена" />
+      						<TableColumn fx:id="col_brisenjeOdCR" prefWidth="112.0" text="бришење од Ц.Р." />
+      						<TableColumn fx:id="col_zaprena" prefWidth="95.0" text="запрена" />
+      						
+            					</columns>
+      				</TableView>
+                  <Button fx:id="ispolniBtn" contentDisplay="BOTTOM" layoutX="1124.0" layoutY="404.0" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" onAction="#ispolniTrajni" prefHeight="32.0" prefWidth="211.0" styleClass="btns-vnesiTrajni" text="Внеси во трајни ст. по." textFill="#92959e">
+                     <font>
+                        <Font name="Ebrima" size="16.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="stikla" contentDisplay="BOTTOM" layoutX="14.0" layoutY="404.0" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" onAction="#stikliraj" prefHeight="32.0" prefWidth="211.0" styleClass="btns-vnesiTrajni" text="Штиклирај" textFill="#92959e">
+                     <font>
+                        <Font name="Ebrima" size="16.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="notStikla" contentDisplay="BOTTOM" layoutX="256.0" layoutY="404.0" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" onAction="#odstikliraj" prefHeight="32.0" prefWidth="211.0" styleClass="btns-vnesiTrajni" text="Одштиклирај" textFill="#92959e">
+                     <font>
+                        <Font name="Ebrima" size="16.0" />
+                     </font>
+                  </Button>
+               </children>
+            </AnchorPane>
+			</children>
+		</Pane>
+	</children>
+</AnchorPane>

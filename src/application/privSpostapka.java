@@ -29,27 +29,44 @@ public class privSpostapka
 		super();
 	}
 	
+	private String vratiTocnaGoleminaNaString(String praten)
+	{
+		
+		try
+		{
+			if (praten.length() > 200) {
+				praten = praten.substring(0, 200);
+				}
+			
+		}		
+		catch(Exception e)
+		{
+			praten="";
+		}
+		return praten;
+	}
 	
-
 	
 	public privSpostapka(String sud, String resenie, String pravnoLice, String edb, String datum, String predStecajna,
 			String statusZakazanoRociste, String otvorena, String nesprovedena, String zaklucuva, String brisenjeOdCR,
-			String zapira, CheckBox check, int id) {
+			String zapira, CheckBox check, int id, String embs) {
 		super();
-		this.sud = sud;
-		this.resenie = resenie;
-		this.pravnoLice = pravnoLice;
-		this.edb = edb;
-		this.datum = datum;
-		this.predStecajna = predStecajna;
-		this.statusZakazanoRociste = statusZakazanoRociste;
-		this.otvorena = otvorena;
-		this.nesprovedena = nesprovedena;
-		this.zaklucuva = zaklucuva;
-		this.brisenjeOdCR = brisenjeOdCR;
-		this.zapira = zapira;
+		
+		this.sud = vratiTocnaGoleminaNaString(sud);
+		this.resenie = vratiTocnaGoleminaNaString(resenie);
+		this.pravnoLice = vratiTocnaGoleminaNaString(pravnoLice);
+		this.edb = vratiTocnaGoleminaNaString(edb);
+		this.datum = vratiTocnaGoleminaNaString(datum);
+		this.predStecajna = vratiTocnaGoleminaNaString(predStecajna);
+		this.statusZakazanoRociste = vratiTocnaGoleminaNaString(statusZakazanoRociste);
+		this.otvorena = vratiTocnaGoleminaNaString(otvorena);
+		this.nesprovedena = vratiTocnaGoleminaNaString(nesprovedena);
+		this.zaklucuva = vratiTocnaGoleminaNaString(zaklucuva);
+		this.brisenjeOdCR = vratiTocnaGoleminaNaString(brisenjeOdCR);
+		this.zapira = vratiTocnaGoleminaNaString(zapira);
 		this.check = check;
 		this.id = id;
+		this.embs = embs;
 	}
 
 	public privSpostapka(String sud, String resenie, String pravnoLice, String edb, String datum, String predStecajna,
@@ -57,22 +74,25 @@ public class privSpostapka
 			String zapira, int id) 
 	{
 		super();
-		this.sud = sud;
-		this.resenie = resenie;
-		this.pravnoLice = pravnoLice;
-		this.edb = edb;
-		this.datum = datum;
-		this.predStecajna = predStecajna;
-		this.statusZakazanoRociste = statusZakazanoRociste;
-		this.otvorena = otvorena;
-		this.nesprovedena = nesprovedena;
-		this.zaklucuva = zaklucuva;
-		this.brisenjeOdCR = brisenjeOdCR;
-		this.zapira = zapira;
-		//this.check = check;
+		this.sud = vratiTocnaGoleminaNaString(sud);
+		this.resenie = vratiTocnaGoleminaNaString(resenie);
+		this.pravnoLice = vratiTocnaGoleminaNaString(pravnoLice);
+		this.edb = vratiTocnaGoleminaNaString(edb);
+		this.datum = vratiTocnaGoleminaNaString(datum);
+		this.predStecajna = vratiTocnaGoleminaNaString(predStecajna);
+		this.statusZakazanoRociste = vratiTocnaGoleminaNaString(statusZakazanoRociste);
+		this.otvorena = vratiTocnaGoleminaNaString(otvorena);
+		this.nesprovedena = vratiTocnaGoleminaNaString(nesprovedena);
+		this.zaklucuva = vratiTocnaGoleminaNaString(zaklucuva);
+		this.brisenjeOdCR = vratiTocnaGoleminaNaString(brisenjeOdCR);
+		this.zapira = vratiTocnaGoleminaNaString(zapira);		
 		this.id = id;
+		
 	}
+	
+	
 
+	
 
 	private String sud;
 	
@@ -100,6 +120,10 @@ public class privSpostapka
 	private String zapira;
 		
 	private CheckBox check;
+	
+	private String sobranie;
+	
+	private String embs;
 	
 	private int id;
 	
@@ -225,6 +249,13 @@ public class privSpostapka
 	public void setDatum(String datum) {
 		this.datum = datum;
 	}
+	
+	public String getEmbs() {
+		return embs;
+	}
 
+	public void setEmbs(String embs) {
+		this.embs = embs;
+	}
 
 }

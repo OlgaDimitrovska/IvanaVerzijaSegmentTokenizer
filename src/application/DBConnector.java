@@ -15,7 +15,7 @@ public class DBConnector
 		{
 			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
 			
-			connection = DriverManager.getConnection("jdbc:sqlserver://localhost:1433;databaseName=StecajniPostapki", "sa", "sql&627S");
+			connection = DriverManager.getConnection("jdbc:sqlserver://IVANAM;databaseName=SP", "sa", "sql&627S");
 			
 			return connection;
 		} 
